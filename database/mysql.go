@@ -23,14 +23,12 @@ func InitDB() error {
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-	log.Println(string(byteValue))
 
 	var jsonConfig map[string]map[string]string
 	json.Unmarshal(byteValue, &jsonConfig)
 
 	conf := jsonConfig["ConnectionConfig"]
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s", conf["user"], conf["password"], conf["host"], conf["database"])
-	log.Println(dataSourceName)
 
 	DB, err = gorm.Open(mysql.Open(dataSourceName),&gorm.Config{})
 	if err != nil {

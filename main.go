@@ -13,7 +13,8 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	log.Println("db ok")
+
+	log.Println("DB connected succes")
 
 	r := routers.InitRouter()
 	r.Run(":8000")

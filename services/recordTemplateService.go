@@ -3,6 +3,8 @@ package services
 import (
 	"editor-backend/database"
 	"editor-backend/entities"
+
+	"gorm.io/gorm/clause"
 )
 
 func InsertMedicalRecordTemplate(recordType, template string) error {
@@ -10,8 +12,12 @@ func InsertMedicalRecordTemplate(recordType, template string) error {
 		RecordType: recordType,
 		Template: template,
 	}
-
-	if err := database.DB.Create(&medicalRecordTemplate).Error; err != nil {
+	
+	db := database.DB
+	if err := db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "record_type"}},
+		DoUpdates: clause.AssignmentColumns([]string{"template"}),
+	}).Create(&medicalRecordTemplate).Error; err != nil {
 		return err
 	}
 

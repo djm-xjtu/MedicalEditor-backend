@@ -4,7 +4,6 @@ import (
 	"editor-backend/database"
 	"editor-backend/entities"
 	"fmt"
-	"log"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -18,18 +17,14 @@ func UpdateOrInsertMedicalRecord(patientId int, recordType, record string) error
 	}
 
 	db := database.DB
-	log.Println("record")
-	log.Println(medicalRecord)
 
 	if err := db.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "patient_id"}, {Name: "record_type"}},
 		DoUpdates: clause.AssignmentColumns([]string{"record"}),
 	}).Create(&medicalRecord).Error; err != nil {
-		log.Println(5)
 		return err
 	}
 
-	log.Println(6)
 	return nil
 }
 
