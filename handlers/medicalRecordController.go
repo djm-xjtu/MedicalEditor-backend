@@ -38,16 +38,17 @@ func GetMedicalRecord(c *gin.Context) {
 	recordType := c.Query("recordType")
 	fmt.Printf("patientId: %d recordType: %s\n", patientId, recordType)
 
-	record, err := services.GetMedicalRecord(patientId, recordType)
+	record, isRecord, err := services.GetMedicalRecord(patientId, recordType)
 
 	if err != nil {
-		log.Println(err)
+		log.Printf("err: %v", err)
 		c.JSON(http.StatusOK, gin.H{
 			"record": nil,
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"record": record,
+			"isRecord": isRecord,
 		})
 	}
 }

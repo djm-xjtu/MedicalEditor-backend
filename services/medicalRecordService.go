@@ -24,7 +24,7 @@ func UpdateOrInsertMedicalRecord(patientId int, recordType, record string) error
 	return nil
 }
 
-func GetMedicalRecord(patientId int, recordType string) (string, error) {
+func GetMedicalRecord(patientId int, recordType string) (string, bool, error) {
 	db := database.DB
 	medicalRecord := entities.MedicalRecord{
 		PatientId:  patientId,
@@ -32,8 +32,17 @@ func GetMedicalRecord(patientId int, recordType string) (string, error) {
 	}
 
 	if err := db.Where(&medicalRecord).First(&medicalRecord).Error; err != nil {
-		return "", err
+		log.Printf("[patientId: %d recordType: %s] record not found, try to find template\n", patientId, recordType)
+		medicalRecordTemplate := entities.MedicalRecordTemplate{
+			RecordType: recordType,
+		}
+
+		if err := db.Where(&medicalRecordTemplate).First(&medicalRecordTemplate).Error; err != nil {
+			return "", false, err
+		}
+
+		return medicalRecordTemplate.Template, false, nil
 	}
 
-	return medicalRecord.Record, nil
+	return medicalRecord.Record, true, nil
 }
