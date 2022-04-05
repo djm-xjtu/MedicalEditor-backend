@@ -8,7 +8,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -31,7 +32,7 @@ func InitDB() error {
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s", conf["user"], conf["password"], conf["host"], conf["database"])
 	log.Println(dataSourceName)
 
-	DB, err = gorm.Open("mysql", dataSourceName)
+	DB, err = gorm.Open(mysql.Open(dataSourceName),&gorm.Config{})
 	if err != nil {
 		return err
 	}
@@ -43,8 +44,4 @@ func InitDB() error {
 	log.Println("connnect success")
 	DB.AutoMigrate(&entities.Department{})
 	return nil
-}
-
-func Close()  {
-	DB.Close()
 }

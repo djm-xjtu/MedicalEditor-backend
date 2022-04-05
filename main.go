@@ -4,8 +4,6 @@ import (
 	"editor-backend/database"
 	"editor-backend/routers"
 	"log"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 
@@ -16,7 +14,6 @@ func main() {
 		log.Panic(err)
 	}
 	log.Println("db ok")
-	defer database.Close()
 
 	r := routers.InitRouter()
 	r.Run(":8000")
