@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"editor-backend/services"
+	"editor-backend/internal/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

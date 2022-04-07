@@ -1,2 +1,3 @@
-conf/mysql-config.json
+configs/mysql.json
+
 .*

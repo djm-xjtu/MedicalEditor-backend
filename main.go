@@ -1,8 +1,8 @@
 package main
 
 import (
-	"editor-backend/database"
-	"editor-backend/routers"
+	"editor-backend/internal/database"
+	"editor-backend/internal/routers"
 	"log"
 )
 

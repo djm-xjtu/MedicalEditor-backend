@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"editor-backend/handlers"
-	"editor-backend/middlewares"
+	"editor-backend/internal/handlers"
+	"editor-backend/internal/middlewares"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

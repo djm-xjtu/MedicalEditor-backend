@@ -1,8 +1,8 @@
 package services
 
 import (
-	"editor-backend/database"
-	"editor-backend/entities"
+	"editor-backend/internal/database"
+	"editor-backend/internal/entities"
 
 	"gorm.io/gorm/clause"
 )

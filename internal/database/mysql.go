@@ -1,7 +1,7 @@
 package database
 
 import (
-	"editor-backend/entities"
+	"editor-backend/internal/entities"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -15,7 +15,7 @@ import (
 var DB *gorm.DB
 
 func InitDB() error {
-	jsonFile, err := os.Open("conf/mysql-config.json")
+	jsonFile, err := os.Open("configs/mysql-config.json")
 	if err != nil {
 		return err
 	}
