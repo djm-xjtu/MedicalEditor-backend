@@ -32,4 +32,21 @@ func CreateRecordTemplate(c *gin.Context) {
 	}
 }
 
+func GetRecordTemplate(c *gin.Context)  {
+	recordType := c.Query("recordType")
+
+	template, err := services.GetMedicalRecordTemplate(recordType)
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok": false,
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"template": template,
+			"ok": true,
+		})
+	}
+}
+
 

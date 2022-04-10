@@ -16,8 +16,10 @@ func InitRouter() *gin.Engine {
 		c.String(http.StatusOK, "It works")
 	})
 
-	router.GET("/departments", handlers.GetDepartmentList)
+	router.GET("/patientInfos", handlers.GetPatientInfoList)
+	router.GET("/patientInfo", handlers.GetPatientInfo)
 	router.POST("/record-template", handlers.CreateRecordTemplate)
+	router.GET("/record-template", handlers.GetRecordTemplate)
 	router.POST("/medical-record", handlers.UpdateMedicalRecord)
 	router.GET("/medical-record", handlers.GetMedicalRecord)
 

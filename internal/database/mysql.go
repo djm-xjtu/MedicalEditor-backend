@@ -15,7 +15,7 @@ import (
 var DB *gorm.DB
 
 func InitDB() error {
-	jsonFile, err := os.Open("configs/mysql-config.json")
+	jsonFile, err := os.Open("configs/mysql.json")
 	if err != nil {
 		return err
 	}
