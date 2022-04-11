@@ -20,7 +20,7 @@ type TreePatientInfo struct {
 	Expand      bool              `json:"expand"`
 	Contextmenu bool              `json:"contextmenu"`
 	Children    []TreePatientInfo `json:"children"`
-	Id          int               `json:"id"`
+	Id         string              `json:"id"`
 	Name        string            `json:"name"`
 	Department  string            `json:"department"`
 	IdNumber    string            `json:"idNumber"`
@@ -40,7 +40,7 @@ func GetPatientInfos() ([]TreePatientInfo, error) {
 
 		tempTreeMap[patientInfo.Department] = append(tempTreeMap[patientInfo.Department], entities.PatientInfo{
 			PatientId:  patientInfo.PatientId,
-			Name:       patientInfo.Name,
+			PatientName:       patientInfo.PatientName,
 			IdNumber:   patientInfo.IdNumber,
 			Department: patientInfo.Department,
 		})
@@ -57,7 +57,7 @@ func GetPatientInfos() ([]TreePatientInfo, error) {
 
 		for _, patientInfo := range patientInfoList {
 			patientItem := TreePatientInfo{
-				Title:       patientInfo.Name,
+				Title:       patientInfo.PatientName,
 				IdNumber:    patientInfo.IdNumber,
 				Expand:      false,
 				Contextmenu: false,
@@ -68,7 +68,7 @@ func GetPatientInfos() ([]TreePatientInfo, error) {
 				recordItem := TreePatientInfo{
 					Title:       recordType,
 					Id:          patientInfo.PatientId,
-					Name:        patientInfo.Name,
+					Name:        patientInfo.PatientName,
 					IdNumber:    patientInfo.IdNumber,
 					Department:  department,
 					Expand:      false,
@@ -84,9 +84,9 @@ func GetPatientInfos() ([]TreePatientInfo, error) {
 	return treePatientInfos, nil
 }
 
-func GetPatientInfoByPatientId(patientId int) ([]TreePatientInfo, error) {
+func GetPatientInfoByPatientId(patientId string) ([]TreePatientInfo, error) {
 	var patientInfo entities.PatientInfo
-	log.Printf("patientId %d", patientId)
+	log.Printf("patientId %s", patientId)
 	if err := database.DB.Where("patient_id = ?", patientId).Find(&patientInfo).Error; err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func GetPatientInfoByPatientId(patientId int) ([]TreePatientInfo, error) {
 	}
 	log.Println(patientInfo)
 	patientItem := TreePatientInfo{
-		Title:       patientInfo.Name,
+		Title:       patientInfo.PatientName,
 		IdNumber:    patientInfo.IdNumber,
 		Expand:      false,
 		Contextmenu: false,
@@ -109,7 +109,7 @@ func GetPatientInfoByPatientId(patientId int) ([]TreePatientInfo, error) {
 			Id:          patientInfo.PatientId,
 			IdNumber:    patientInfo.IdNumber,
 			Department:  patientInfo.Department,
-			Name:        patientInfo.Name,
+			Name:        patientInfo.PatientName,
 			Expand:      false,
 			Contextmenu: true,
 		}

@@ -3,9 +3,7 @@ package services
 import (
 	"editor-backend/internal/database"
 	"editor-backend/internal/entities"
-	"encoding/xml"
 	"fmt"
-	"net/url"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -28,12 +26,12 @@ func InsertMedicalRecordTemplate(recordType, template string) error {
 		Template:   template,
 	}
 
-	var templateXml Xml
-	xml.Unmarshal([]byte(template), &templateXml)
-	fmt.Printf("xml:\n%+v\n", templateXml)
+	// var templateXml Xml
+	// xml.Unmarshal([]byte(template), &templateXml)
+	// fmt.Printf("xml:\n%+v\n", templateXml)
 
-	enEscapeUrl, _ := url.QueryUnescape(templateXml.Html)
-	fmt.Println("解码:", enEscapeUrl)
+	// enEscapeUrl, _ := url.QueryUnescape(templateXml.Html)
+	// fmt.Println("解码:", enEscapeUrl)
 
 	db := database.DB
 	if err := db.Clauses(clause.OnConflict{

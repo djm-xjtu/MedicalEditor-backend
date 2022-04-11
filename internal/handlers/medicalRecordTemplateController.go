@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"editor-backend/internal/services"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,8 +15,6 @@ type RecordTemplate struct {
 func CreateRecordTemplate(c *gin.Context) {
 	recordTemplate := RecordTemplate{}
 	c.BindJSON(&recordTemplate)
-	fmt.Println(recordTemplate.RecordType)
-	fmt.Println(recordTemplate.Template)
 
 	err := services.InsertMedicalRecordTemplate(recordTemplate.RecordType, recordTemplate.Template)
 

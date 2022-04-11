@@ -9,7 +9,7 @@ import (
 
 
 func main() {
-	err := database.InitDB()
+	err := database.InitMssqlDB()
 	if err != nil {
 		log.Panic(err)
 	}

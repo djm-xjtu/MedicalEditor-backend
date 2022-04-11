@@ -3,7 +3,6 @@ package handlers
 import (
 	"editor-backend/internal/services"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +22,7 @@ func GetPatientInfoList(c *gin.Context) {
 }
 
 func GetPatientInfo(c *gin.Context) {
-	patientId, _ := strconv.Atoi(c.Query("patientId"))
+	patientId := c.Query("patientId")
 	patientInfo, err := services.GetPatientInfoByPatientId(patientId)
 
 	if err != nil {

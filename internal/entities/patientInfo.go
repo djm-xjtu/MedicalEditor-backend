@@ -1,8 +1,8 @@
 package entities
 
 type PatientInfo struct {
-	PatientId  int    `gorm:"column:patient_id"`
+	PatientId  string `gorm:"column:patient_id"`
 	Department string `gorm:"column:department"`
-	Name       string `gorm:"column:name"`
+	PatientName       string `gorm:"column:patient_name"`
 	IdNumber   string `gorm:"column:id_number"`
 }

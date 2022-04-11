@@ -8,16 +8,16 @@ import (
 	"log"
 	"os"
 
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+// var DB *gorm.DB
 
 // "sqlserver://sa:czacza-20001207@localhost:1433?database=TestDB"
 
-func InitDB() error {
-	jsonFile, err := os.Open("configs/mysql.json")
+func InitMssqlDB() error {
+	jsonFile, err := os.Open("configs/mssql.json")
 	if err != nil {
 		return err
 	}
@@ -30,9 +30,9 @@ func InitDB() error {
 	json.Unmarshal(byteValue, &jsonConfig)
 
 	conf := jsonConfig["ConnectionConfig"]
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s", conf["user"], conf["password"], conf["host"], conf["database"])
-	fmt.Println(dataSourceName)
-	DB, err = gorm.Open(mysql.Open(dataSourceName),&gorm.Config{})
+	dataSourceName := fmt.Sprintf("sqlserver://%s:%s@%s?database=%s", conf["user"], conf["password"], conf["host"], conf["database"])
+
+	DB, err = gorm.Open(sqlserver.Open(dataSourceName),&gorm.Config{})
 	if err != nil {
 		return err
 	}
