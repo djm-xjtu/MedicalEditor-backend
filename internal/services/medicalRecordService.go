@@ -4,42 +4,33 @@ import (
 	"editor-backend/internal/database"
 	"editor-backend/internal/entities"
 	"fmt"
+	"log"
 
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
-func UpdateOrInsertMedicalRecord(patientId int, recordType, record string) error {
-	medicalRecord := entities.MedicalRecord{
-		PatientId:  patientId,
-		RecordType: recordType,
-		Record:     record,
-	}
-
+func UpdateMedicalRecord(record string, recordNo int) error {
 	db := database.DB
-
-	if err := db.Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "patient_id"}, {Name: "record_type"}},
-		DoUpdates: clause.AssignmentColumns([]string{"record"}),
-	}).Create(&medicalRecord).Error; err != nil {
+	log.Printf("record_no: %d", recordNo)
+	if err := db.Model(&entities.MedicalRecord{}).Where("record_no = ?", recordNo).Update("record", record).Error; err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func GetMedicalRecord(patientId int, recordType string) (string, bool, error) {
+func GetMedicalRecord(patientCdno string, templateName string) (string, bool, error) {
 	db := database.DB
 	medicalRecord := entities.MedicalRecord{
-		PatientId:  patientId,
-		RecordType: recordType,
+		PatientCdno: patientCdno,
+		RecordType:  templateName,
 	}
 
 	if err := db.Where(&medicalRecord).First(&medicalRecord).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			fmt.Printf("[patientId: %d recordType: %s] record not found, try to find template\n", patientId, recordType)
+			fmt.Printf("[patientId: %s TemplateName: %s] record not found, try to find template\n", patientCdno, templateName)
 			medicalRecordTemplate := entities.MedicalRecordTemplate{
-				RecordType: recordType,
+				TemplateName: templateName,
 			}
 
 			if err := db.Where(&medicalRecordTemplate).First(&medicalRecordTemplate).Error; err != nil {
@@ -53,4 +44,30 @@ func GetMedicalRecord(patientId int, recordType string) (string, bool, error) {
 	}
 
 	return medicalRecord.Record, true, nil
+}
+
+func GetMedicalRecords(patientCdno string) ([]entities.MedicalRecord, error) {
+	db := database.DB
+	var medicalRecords []entities.MedicalRecord
+
+	if err := db.Where("patient_cdno = ?", patientCdno).Find(&medicalRecords).Error; err != nil {
+		return nil, err
+	}
+
+	return medicalRecords, nil
+}
+
+func InsertMedicalRecord(patientCdno, recordType, record string) error {
+	medicalRecord := entities.MedicalRecord{
+		PatientCdno: patientCdno,
+		RecordType:  recordType,
+		Record:      record,
+	}
+
+	err := entities.AddMedicalRecord(medicalRecord)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

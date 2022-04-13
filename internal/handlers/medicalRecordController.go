@@ -5,21 +5,22 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type RecordInfo struct {
-	PatientId  int    `json:"patientId"`
-	RecordType string `json:"recordType"`
-	Record     string `json:"record"`
+	PatientCdno string `json:"patientCdno"`
+	RecordType  string `json:"recordType"`
+	Record      string `json:"record"`
+	RecordNo    int    `json:"recordNo"`
 }
 
 func UpdateMedicalRecord(c *gin.Context) {
 	recordInfo := RecordInfo{}
 	c.BindJSON(&recordInfo)
-	err := services.UpdateOrInsertMedicalRecord(recordInfo.PatientId, recordInfo.RecordType, recordInfo.Record)
+	log.Printf("recordInfo %+v\n", recordInfo)
+	err := services.UpdateMedicalRecord(recordInfo.Record, recordInfo.RecordNo)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -34,11 +35,11 @@ func UpdateMedicalRecord(c *gin.Context) {
 }
 
 func GetMedicalRecord(c *gin.Context) {
-	patientId, _ := strconv.Atoi(c.Query("patientId"))
+	patientCdno := c.Query("patientCdno")
 	recordType := c.Query("recordType")
-	fmt.Printf("patientId: %d recordType: %s\n", patientId, recordType)
+	fmt.Printf("patientId: %s recordType: %s\n", patientCdno, recordType)
 
-	record, isRecord, err := services.GetMedicalRecord(patientId, recordType)
+	record, isRecord, err := services.GetMedicalRecord(patientCdno, recordType)
 
 	if err != nil {
 		log.Printf("err: %v", err)
@@ -47,8 +48,25 @@ func GetMedicalRecord(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"record": record,
+			"record":   record,
 			"isRecord": isRecord,
+		})
+	}
+}
+
+func InsertMedicalRecord(c *gin.Context) {
+	recordInfo := RecordInfo{}
+	c.BindJSON(&recordInfo)
+	err := services.InsertMedicalRecord(recordInfo.PatientCdno, recordInfo.RecordType, recordInfo.Record)
+
+	if err != nil {
+		log.Fatalln(err)
+		c.JSON(http.StatusOK, gin.H{
+			"msg": "insert fail",
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"msg": "ok",
 		})
 	}
 }

@@ -87,14 +87,17 @@ func GetPatientInfos() ([]TreePatientInfo, error) {
 func GetPatientInfoByPatientId(patientId string) ([]TreePatientInfo, error) {
 	var patientInfo entities.PatientInfo
 	log.Printf("patientId %s", patientId)
+	log.Println(11)
 	if err := database.DB.Where("patient_id = ?", patientId).Find(&patientInfo).Error; err != nil {
+		log.Println(11)
 		return nil, err
 	}
 
 	if patientId != patientInfo.PatientId {
+		log.Printf("+%v",patientInfo)
 		return nil, errors.New("no record")
 	}
-	log.Println(patientInfo)
+	log.Printf("12")
 	patientItem := TreePatientInfo{
 		Title:       patientInfo.PatientName,
 		IdNumber:    patientInfo.IdNumber,

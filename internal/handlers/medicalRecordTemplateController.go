@@ -7,16 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RecordTemplate struct {
-	RecordType string `json:"recordType"`
-	Template   string `json:"template"`
-}
+
 
 func CreateRecordTemplate(c *gin.Context) {
-	recordTemplate := RecordTemplate{}
+	recordTemplate := services.RecordTemplate{}
 	c.BindJSON(&recordTemplate)
 
-	err := services.InsertMedicalRecordTemplate(recordTemplate.RecordType, recordTemplate.Template)
+	err := services.InsertMedicalRecordTemplate(recordTemplate)
 
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -29,7 +26,7 @@ func CreateRecordTemplate(c *gin.Context) {
 	}
 }
 
-func GetRecordTemplate(c *gin.Context)  {
+func GetRecordTemplate(c *gin.Context) {
 	recordType := c.Query("recordType")
 
 	template, err := services.GetMedicalRecordTemplate(recordType)
@@ -41,9 +38,7 @@ func GetRecordTemplate(c *gin.Context)  {
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"template": template,
-			"ok": true,
+			"ok":       true,
 		})
 	}
 }
-
-

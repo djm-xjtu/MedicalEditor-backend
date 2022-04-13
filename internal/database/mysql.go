@@ -1,7 +1,6 @@
 package database
 
 import (
-	"editor-backend/internal/entities"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -42,6 +41,5 @@ func InitDB() error {
     }
 
 	log.Println("connnect success")
-	DB.AutoMigrate(&entities.Department{})
 	return nil
 }

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"editor-backend/internal/services"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,6 +27,7 @@ func GetPatientInfo(c *gin.Context) {
 	patientInfo, err := services.GetPatientInfoByPatientId(patientId)
 
 	if err != nil {
+		log.Println(err)
 		c.JSON(http.StatusOK, gin.H{
 			"patientInfo": nil,
 		})
