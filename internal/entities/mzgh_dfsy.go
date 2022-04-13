@@ -3,7 +3,7 @@ package entities
 import "editor-backend/internal/database"
 
 type MzghDfsy struct {
-	Mzghxh string // 门诊挂号序号
+	Mzghxh string // 门诊挂号序号 AbcDef abc_def
 	Xm     string // 姓名
 	Xb     string // 性别
 	Cssj   string // 出生时间
@@ -39,6 +39,7 @@ func GetMzghDfsy(mzghxh string) (MzghDfsy, error) {
 	}
 
 	db := database.DB
+	// select * from MZGH_DFSY where mzghxh = .. limit 1
 	if err := db.Where(&m).First(&m).Error; err != nil {
 		return MzghDfsy{}, err
 	}

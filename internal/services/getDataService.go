@@ -10,14 +10,14 @@ var OldRecordList = []string{"历史病历1", "历史病历2", "历史病历3"}
 var RecordTemplateList = []string{"模板病历1", "模板病历2", "模板病历3"}
 
 type PatientInfo struct {
-	Mzghxh string
-	Xm     string
-	Xb     string
-	Cssj   string
-	Nl     string
-	Kb     string
-	Cdno   string
-	Sfzhm  string
+	Mzghxh string `json:"mzghxh"`
+	Xm     string `json:"xm"`
+	Xb     string `json:"xb"`
+	Cssj   string `json:"cssj"`
+	Nl     string `json:"nl"`
+	Kb     string `json:"kb"`
+	Cdno   string `json:"cdno"`
+	Sfzhm  string `json:"sfzhm"`
 }
 
 type TreeData struct {
@@ -33,8 +33,8 @@ type TreeData struct {
 }
 
 type Data struct {
-	PatientInfo PatientInfo
-	MenuData    []TreeData
+	PatientInfo PatientInfo `json:"patientInfo"`
+	MenuData    []TreeData  `json:"menuData"`
 }
 
 func GetMenuInfo() ([]TreeData, error) {
@@ -98,16 +98,16 @@ func GetData(mzghxh string) (Data, error) {
 
 	historyRecordItem := TreeData{
 		Title:       "历史病历",
-		Expand:      false,
+		Expand:      true,
 		Contextmenu: false,
 	}
 
 	for _, r := range records {
 		historyRecordItem.Children = append(historyRecordItem.Children, TreeData{
-			Title:    fmt.Sprintf("%s - %d", r.RecordType, r.RecordNo),
-			Xml:      r.Record,
-			RecordNo: r.RecordNo,
-			IsRecord: true,
+			Title:      fmt.Sprintf("%s - %d", r.RecordType, r.RecordNo),
+			Xml:        r.Record,
+			RecordNo:   r.RecordNo,
+			IsRecord:   true,
 			RecordType: r.RecordType,
 		})
 		log.Printf("XmlNo: %s", string(rune(r.RecordNo)))
@@ -115,7 +115,7 @@ func GetData(mzghxh string) (Data, error) {
 
 	recordTemplateItem := TreeData{
 		Title:       "病历模板",
-		Expand:      false,
+		Expand:      true,
 		Contextmenu: false,
 	}
 
