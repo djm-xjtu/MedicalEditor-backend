@@ -2,7 +2,6 @@ package services
 
 import (
 	"editor-backend/internal/entities"
-	"fmt"
 	"log"
 )
 
@@ -21,46 +20,62 @@ type PatientInfo struct {
 }
 
 type TreeData struct {
-	Title       string     `json:"title"`
-	Expand      bool       `json:"expand"`
-	Contextmenu bool       `json:"contextmenu"`
-	Children    []TreeData `json:"children"`
-	Xml         string     `json:"xml"`
-	RecordType  string     `json:"recordType"`
-	RecordNo    int        `json:"recordNo"`
-	TemplateNo  string     `json:"templateNo"`
-	IsRecord    bool       `json:"isRecord"`
+	Label        string     `json:"label"`
+	Expand       bool       `json:"expand"`
+	Contextmenu  bool       `json:"contextmenu"`
+	Children     []TreeData `json:"children"`
+	Xml          string     `json:"xml"`
+	RecordType   string     `json:"recordType"`
+	RecordNo     int        `json:"recordNo"`
+	Template     string     `json:"template"`
+	TemplateNo   string     `json:"templateNo"`
+	TemplateName string     `json:"templateName"`
+	IsRecord     bool       `json:"isRecord"`
+	Record       string     `json:"record"`
+}
+
+type RecordTemplateData struct {
+	TemplateNo   string `json:"templateNo"`
+	TemplateName string `json:"templateName"`
+	Template     string `json:"template"`
+}
+
+type HistoryRecordData struct {
+	RecordNo   int    `json:"recordNo"`
+	RecordType string `json:"recordType"`
+	Record     string `json:"record"`
 }
 
 type Data struct {
-	PatientInfo PatientInfo `json:"patientInfo"`
-	MenuData    []TreeData  `json:"menuData"`
+	PatientInfo        PatientInfo          `json:"patientInfo"`
+	HistoryRecordData  []HistoryRecordData  `json:"historyRecords"`
+	RecordTemplateData []RecordTemplateData `json:"availableTemplates"`
 }
 
 func GetMenuInfo() ([]TreeData, error) {
 	oldRecordItem := TreeData{
-		Title:       "历史病历",
+		Label:       "历史病历",
 		Expand:      false,
 		Contextmenu: false,
 	}
 
 	for _, str := range OldRecordList {
 		oldRecordItem.Children = append(oldRecordItem.Children, TreeData{
-			Title:       str,
+			Label:       str,
 			Expand:      false,
 			Contextmenu: false,
 		})
 	}
 
 	recordTemplateItem := TreeData{
-		Title:       "模板病历",
+		Label:       "模板病历",
 		Expand:      false,
 		Contextmenu: false,
 	}
 
 	for _, str := range RecordTemplateList {
 		recordTemplateItem.Children = append(recordTemplateItem.Children, TreeData{
-			Title:       str,
+			Label:       str,
 			Expand:      false,
 			Contextmenu: false,
 		})
@@ -96,41 +111,30 @@ func GetData(mzghxh string) (Data, error) {
 		Sfzhm:  m.Sfzhm,
 	}
 
-	historyRecordItem := TreeData{
-		Title:       "历史病历",
-		Expand:      true,
-		Contextmenu: false,
-	}
+	historyRecordItem := []HistoryRecordData{}
 
 	for _, r := range records {
-		historyRecordItem.Children = append(historyRecordItem.Children, TreeData{
-			Title:      fmt.Sprintf("%s - %d", r.RecordType, r.RecordNo),
-			Xml:        r.Record,
+		historyRecordItem = append(historyRecordItem, HistoryRecordData{
 			RecordNo:   r.RecordNo,
-			IsRecord:   true,
 			RecordType: r.RecordType,
+			Record:     r.Record,
 		})
 		log.Printf("XmlNo: %s", string(rune(r.RecordNo)))
 	}
 
-	recordTemplateItem := TreeData{
-		Title:       "病历模板",
-		Expand:      true,
-		Contextmenu: false,
-	}
+	recordTemplateItem := []RecordTemplateData{}
 
 	for _, t := range templates {
-		recordTemplateItem.Children = append(recordTemplateItem.Children, TreeData{
-			Title:      t.TemplateName,
-			Xml:        t.Template,
-			TemplateNo: t.TemplateNo,
-			IsRecord:   false,
-			RecordType: t.TemplateName,
+		recordTemplateItem = append(recordTemplateItem, RecordTemplateData{
+			TemplateNo:   t.TemplateNo,
+			TemplateName: t.TemplateName,
+			Template:     t.Template,
 		})
 	}
 
 	return Data{
-		PatientInfo: patientInfo,
-		MenuData:    []TreeData{historyRecordItem, recordTemplateItem},
+		PatientInfo:        patientInfo,
+		HistoryRecordData:  historyRecordItem,
+		RecordTemplateData: recordTemplateItem,
 	}, nil
 }
