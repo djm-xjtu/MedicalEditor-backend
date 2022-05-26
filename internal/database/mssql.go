@@ -1,44 +1,44 @@
 package database
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 
+	"gopkg.in/yaml.v2"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 )
 
 // var DB *gorm.DB
-
-// "sqlserver://sa:czacza-20001207@localhost:1433?database=TestDB"
-
+type Connection struct {
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Database string `ysml:"database"`
+}
+var DB *gorm.DB
 func InitMssqlDB() error {
-	jsonFile, err := os.Open("configs/mssql.json")
+	yamlFile, err := ioutil.ReadFile("configs/mssql.yaml")
 	if err != nil {
 		return err
 	}
 
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	var jsonConfig map[string]map[string]string
-	json.Unmarshal(byteValue, &jsonConfig)
-
-	conf := jsonConfig["ConnectionConfig"]
-	dataSourceName := fmt.Sprintf("sqlserver://%s:%s@%s?database=%s", conf["user"], conf["password"], conf["host"], conf["database"])
-
-	DB, err = gorm.Open(sqlserver.Open(dataSourceName),&gorm.Config{})
+	connection := Connection{}
+	yaml.Unmarshal(yamlFile, &connection)
+	log.Println(connection)
+	dataSourceName := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s",
+		connection.User, connection.Password, connection.Host, connection.Port, connection.Database)
+	log.Println(dataSourceName)
+	DB, err = gorm.Open(sqlserver.Open(dataSourceName), &gorm.Config{})
 	if err != nil {
 		return err
 	}
 
 	if DB.Error != nil {
-        return DB.Error
-    }
+		return DB.Error
+	}
 
 	log.Println("connnect success")
 	return nil

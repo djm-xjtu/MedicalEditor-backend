@@ -1,0 +1,5 @@
+host: sql1
+port: 1433
+user: sa
+password: czacza-20001207
+database: TestDB   

@@ -11,8 +11,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
 // "sqlserver://sa:czacza-20001207@localhost:1433?database=TestDB"
 
 func InitDB() error {
@@ -30,7 +28,7 @@ func InitDB() error {
 
 	conf := jsonConfig["ConnectionConfig"]
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s", conf["user"], conf["password"], conf["host"], conf["database"])
-	fmt.Println(dataSourceName)
+	log.Println(dataSourceName)
 	DB, err = gorm.Open(mysql.Open(dataSourceName),&gorm.Config{})
 	if err != nil {
 		return err
