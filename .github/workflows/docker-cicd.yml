@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Configs
-        run: echo ${{ secrets.DB_CONF }} > configs/mssql.json
+        run: echo "${{ secrets.DB_CONF }}" > configs/mssql.json
         
       - name: Build Image
         run: docker build -t ${{ secrets.DOCKER_REPOSITORY }}:latest ./ 
