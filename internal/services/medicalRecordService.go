@@ -4,15 +4,21 @@ import (
 	"editor-backend/internal/database"
 	"editor-backend/internal/entities"
 	"fmt"
-	"log"
 
 	"gorm.io/gorm"
 )
 
-func UpdateMedicalRecord(record string, recordNo int) error {
+func UpdateMedicalRecord(record, mzghxh, updateBy, updateTime, changeLog, recordXml string) error {
 	db := database.DB
-	log.Printf("record_no: %d", recordNo)
-	if err := db.Model(&entities.MedicalRecord{}).Where("record_no = ?", recordNo).Update("record", record).Error; err != nil {
+	medicalRecord := &entities.MedicalRecord{
+		Mzghxh:     mzghxh,
+		Record:     record,
+		UpdateBy:   updateBy,
+		UpdateTime: updateTime,
+		ChangeLog:  changeLog,
+		RecordXml:  recordXml,
+	}
+	if err := db.Model(&medicalRecord).Updates(medicalRecord).Error; err != nil {
 		return err
 	}
 
@@ -57,11 +63,21 @@ func GetMedicalRecords(patientCdno string) ([]entities.MedicalRecord, error) {
 	return medicalRecords, nil
 }
 
-func InsertMedicalRecord(patientCdno, recordType, record string) error {
+func InsertMedicalRecord(mzghxh, patientCdno, recordType, record, xm, xb, cssj, jzks, tel, updateBy, updateTime, changeLog, recordXml string) error {
 	medicalRecord := entities.MedicalRecord{
+		Mzghxh:      mzghxh,
 		PatientCdno: patientCdno,
 		RecordType:  recordType,
 		Record:      record,
+		Xm:          xm,
+		Xb:          xb,
+		Cssj:        cssj,
+		Jzks:        jzks,
+		Tel:         tel,
+		UpdateBy:    updateBy,
+		UpdateTime:  updateTime,
+		ChangeLog:   changeLog,
+		RecordXml:   recordXml,
 	}
 
 	err := entities.AddMedicalRecord(medicalRecord)

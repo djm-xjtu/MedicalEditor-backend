@@ -20,13 +20,26 @@ func InitRouter() *gin.Engine {
 	router.GET("/patientInfos", handlers.GetPatientInfoList)
 	router.GET("/patientInfo", handlers.GetPatientInfo)
 
-	router.POST("/record-template", handlers.CreateRecordTemplate)
-	router.GET("/record-template", handlers.GetRecordTemplate)
-	
-	router.POST("/medical-record/update", handlers.UpdateMedicalRecord)
-	router.POST("/medical-record/insert", handlers.InsertMedicalRecord)
-	router.GET("/medical-record", handlers.GetMedicalRecord)
+	template := router.Group("/record-template")
+	{
+		template.POST("", handlers.CreateRecordTemplate)
+		template.GET("", handlers.GetRecordTemplate)
+	}
 
-	router.GET("/outpatient", handlers.GetData)
+	record := router.Group("/medical-record")
+	{
+		record.POST("/update", handlers.UpdateMedicalRecord)
+		record.POST("/insert", handlers.InsertMedicalRecord)
+	}
+
+	outpatient := router.Group("/outpatient")
+	{
+		outpatient.GET("/login", handlers.Login)
+		outpatient.GET("/logout", handlers.Logout)
+	}
+
+
+
+	router.GET("/medical-record", handlers.GetMedicalRecord)
 	return router
 }

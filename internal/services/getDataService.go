@@ -17,6 +17,9 @@ type PatientInfo struct {
 	Kb     string `json:"kb"`
 	Cdno   string `json:"cdno"`
 	Sfzhm  string `json:"sfzhm"`
+	Df     string `json:"df"`
+	Tel    string `json:"tel"`
+	Class  string `json:"class"`
 }
 
 type TreeData struct {
@@ -41,9 +44,10 @@ type RecordTemplateData struct {
 }
 
 type HistoryRecordData struct {
-	RecordNo   int    `json:"recordNo"`
+	Mzghxh     string `json:"mzghxh"`
 	RecordType string `json:"recordType"`
 	Record     string `json:"record"`
+	ChangeLog  string `json:"changeLog"`
 }
 
 type Data struct {
@@ -85,6 +89,7 @@ func GetMenuInfo() ([]TreeData, error) {
 }
 
 func GetData(mzghxh string) (Data, error) {
+	log.Println(123)
 	m, err := entities.GetMzghDfsy(mzghxh)
 	if err != nil {
 		return Data{}, err
@@ -109,17 +114,21 @@ func GetData(mzghxh string) (Data, error) {
 		Kb:     m.Kb,
 		Cdno:   m.Cdno,
 		Sfzhm:  m.Sfzhm,
+		Df:     m.Df,
+		Tel:    m.Tel,
+		Class:  m.Class,
 	}
 
 	historyRecordItem := []HistoryRecordData{}
 
 	for _, r := range records {
 		historyRecordItem = append(historyRecordItem, HistoryRecordData{
-			RecordNo:   r.RecordNo,
+			Mzghxh:     r.Mzghxh,
 			RecordType: r.RecordType,
 			Record:     r.Record,
+			ChangeLog:  r.ChangeLog,
 		})
-		log.Printf("XmlNo: %s", string(rune(r.RecordNo)))
+		log.Printf("XmlNo: %s", r.Mzghxh)
 	}
 
 	recordTemplateItem := []RecordTemplateData{}

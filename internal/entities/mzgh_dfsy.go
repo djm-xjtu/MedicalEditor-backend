@@ -12,9 +12,9 @@ type MzghDfsy struct {
 	YbDept string // 医保xx
 	Ghfs   string // 挂号方式
 	Df     string // 大夫
-	Ghje   int    // 挂号金额
-	Zlje   int    // 治疗金额
-	Je     int    // 金额
+	Ghje   string    // 挂号金额
+	Zlje   string    // 治疗金额
+	Je     string    // 金额
 	Rq     string // 日期
 	Cdno   string // 病人编号
 	Fylb   string // 费用类别
@@ -24,7 +24,7 @@ type MzghDfsy struct {
 	Sfzhm  string // 身份证号码
 	Class  string // 家庭地址
 	Tel    string // 电话号码
-	Sxbl   int    // ???
+	Sxbl   string    // ???
 	Lry    string // 录入员
 	Zdlb   string // 诊断类别
 }

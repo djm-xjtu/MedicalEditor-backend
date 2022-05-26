@@ -2,17 +2,16 @@ package handlers
 
 import (
 	"editor-backend/internal/services"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-
-
 func CreateRecordTemplate(c *gin.Context) {
 	recordTemplate := services.RecordTemplate{}
 	c.BindJSON(&recordTemplate)
-
+	log.Println(recordTemplate)
 	err := services.InsertMedicalRecordTemplate(recordTemplate)
 
 	if err != nil {
