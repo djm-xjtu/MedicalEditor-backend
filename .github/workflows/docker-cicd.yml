@@ -39,5 +39,5 @@ jobs:
 
             docker pull ${{ secrets.DOCKER_REPOSITORY }}:latest
 
-            docker run -d -p 8000:8000 ${{ secrets.DOCKER_REPOSITORY }}:latest -link ${{ secrets.DB_CONTAINER_NAME }} --name ${{ secrets.CONTAINER_NAME }}
+            docker run -d -p 8000:8000 --link ${{ secrets.DB_CONTAINER_NAME }} --name ${{ secrets.CONTAINER_NAME }} ${{ secrets.DOCKER_REPOSITORY }}:latest
 
