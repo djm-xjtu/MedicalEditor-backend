@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Show Configs
+        run: echo "${{ secrets.DB_CONF }}"
+        
       - name: Build Configs
         run: echo "${{ secrets.DB_CONF }}" > configs/mssql.json
         
