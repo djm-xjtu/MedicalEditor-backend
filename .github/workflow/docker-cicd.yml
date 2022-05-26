@@ -26,7 +26,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }} 
           username: ${{ secrets.HOST_USERNAME }} 
-          password: ${{ secrets.HOST_PASSWORD }} 
+          key: ${{ secrets.HOST_SSH_KEY }}
           port: ${{ secrets.HOST_PORT }} 
           script: |
 
@@ -40,5 +40,5 @@ jobs:
 
             docker pull ${{ secrets.DOCKER_REPOSITORY }}:latest
 
-            docker run -d -p 8000:8000 ${{ secrets.DOCKER_REPOSITORY }}:latest
+            docker run -d -p 8000:8000 ${{ secrets.DOCKER_REPOSITORY }}:latest -link ${{ secrets.DB_CONTAINER_NAME }} --name ${{ secrets.CONTAINER_NAME }}
 
