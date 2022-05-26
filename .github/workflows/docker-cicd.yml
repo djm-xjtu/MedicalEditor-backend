@@ -10,8 +10,7 @@ jobs:
       - name: Build Configs
         run: echo "${{ secrets.DB_CONF }}" > configs/mssql.yaml
       - name: Build Image
-      # ${{ secrets.DOCKER_REPOSITORY }}是读取之前在Secret创建的名为DOCKER_REPOSITORY的值
-        run: docker build -t ${{ secrets.DOCKER_REPOSITORY }}:latest ./ # 打包并docker镜像，版本为latest
+        run: docker build -t ${{ secrets.DOCKER_REPOSITORY }}:latest ./ 
       - name: Login to Registry # 登录阿里云镜像服务器
         run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} ${{ secrets.DOCKER_REGISTRY }}
       - name: Push Image # 推送镜像，设置版本为latest
