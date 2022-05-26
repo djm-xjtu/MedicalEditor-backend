@@ -12,7 +12,7 @@ jobs:
         run: echo "${{ secrets.DB_CONF }}"
         
       - name: Build Configs
-        run: echo "${{ secrets.DB_CONF }}" > configs/mssql.json
+        run: echo "${{ secrets.DB_CONF }}" > configs/mssql.yaml
         
       - name: Build Image
         run: docker build -t ${{ secrets.DOCKER_REPOSITORY }}:latest ./ 
