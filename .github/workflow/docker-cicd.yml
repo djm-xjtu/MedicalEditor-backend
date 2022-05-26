@@ -16,7 +16,7 @@ jobs:
         run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} ${{ secrets.DOCKER_REGISTRY }}
       - name: Push Image # 推送镜像，设置版本为latest
         run: docker push ${{ secrets.DOCKER_REPOSITORY }}:latest
-  pull-docker: # docker部署
+  pull-docker: 
     needs: [build]
     name: Pull Docker
     runs-on: ubuntu-latest
